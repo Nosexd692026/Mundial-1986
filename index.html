@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>México 1986 - Mundial</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Segoe UI',sans-serif;
+    background:
+    linear-gradient(rgba(0,0,0,.75),rgba(0,0,0,.85)),
+    url('https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=1600');
+    background-size:cover;
+    background-attachment:fixed;
+    color:white;
+    overflow-x:hidden;
+}
+
+/* INTRO */
+
+#intro{
+    position:fixed;
+    inset:0;
+    z-index:9999;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    background:
+    linear-gradient(rgba(0,0,0,.8),rgba(0,0,0,.9)),
+    url('https://images.unsplash.com/photo-1517927033932-b3d18e61fb3a?q=80&w=1600');
+    background-size:cover;
+    text-align:center;
+    transition:1s;
+}
+
+#intro.oculto{
+    opacity:0;
+    pointer-events:none;
+}
+
+.pelota{
+    font-size:90px;
+    animation:botar 1s infinite;
+}
+
+@keyframes botar{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-20px);}
+}
+
+.intro-texto{
+    opacity:0;
+    transform:translateY(40px);
+    animation:aparecer 1.5s forwards;
+    text-shadow:0 0 20px rgba(255,255,255,.5);
+}
+
+.intro-texto:nth-child(2){animation-delay:1s;}
+.intro-texto:nth-child(3){animation-delay:2.5s;}
+.intro-texto:nth-child(4){animation-delay:4s;}
+
+.intro-texto h1{
+    font-size:60px;
+    color:#FFD700;
+}
+
+.intro-texto h2{
+    font-size:34px;
+}
+
+.intro-texto p{
+    font-size:22px;
+}
+
+@keyframes aparecer{
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+#btnSkip{
+    margin-top:40px;
+    padding:14px 30px;
+    border:none;
+    border-radius:30px;
+    background:white;
+    color:#CE1126;
+    font-weight:bold;
+    cursor:pointer;
+    font-size:18px;
+    transition:.3s;
+}
+
+#btnSkip:hover{
+    transform:scale(1.1);
+}
+
+/* CONTENEDOR */
+
+#contenedor{
+    display:flex;
+    gap:20px;
+    padding:20px;
+    min-height:100vh;
+}
+
+/* MAPA */
+
+#mapa-container{
+    width:60%;
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(12px);
+    border-radius:20px;
+    padding:20px;
+    border:1px solid rgba(255,255,255,.2);
+    box-shadow:0 0 30px rgba(0,0,0,.5);
+}
+
+#mapa-container h1{
+    text-align:center;
+    margin-bottom:10px;
+    color:#FFD700;
+}
+
+#mapa-container p{
+    text-align:center;
+    margin-bottom:20px;
+    color:#ddd;
+}
+
+svg{
+    width:100%;
+}
+
+/* ESTADOS */
+
+.estado{
+    fill:#888;
+    stroke:white;
+    stroke-width:2;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.estado:hover{
+    fill:#00ff99;
+    transform:scale(1.03);
+}
+
+.con-partido{
+    fill:#CE1126;
+    filter:drop-shadow(0 0 10px red);
+    animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+    0%{filter:drop-shadow(0 0 5px red);}
+    50%{filter:drop-shadow(0 0 20px orange);}
+    100%{filter:drop-shadow(0 0 5px red);}
+}
+
+/* INFO */
+
+#info{
+    width:40%;
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(12px);
+    border-radius:20px;
+    padding:25px;
+    border:1px solid rgba(255,255,255,.2);
+    box-shadow:0 0 30px rgba(0,0,0,.5);
+    max-height:90vh;
+    overflow-y:auto;
+}
+
+#info h2{
+    color:#FFD700;
+    margin-bottom:20px;
+    border-bottom:2px solid rgba(255,255,255,.2);
+    padding-bottom:10px;
+}
+
+#contenido{
+    transition:.4s;
+}
+
+/* ESTADIO */
+
+.nombre-estadio{
+    font-size:24px;
+    font-weight:bold;
+    margin-bottom:15px;
+    text-align:center;
+    color:#FFD700;
+}
+
+.foto-estadio{
+    width:100%;
+    border-radius:15px;
+    margin-bottom:20px;
+    border:2px solid rgba(255,255,255,.3);
+}
+
+/* PARTIDOS */
+
+.partido{
+    background:rgba(255,255,255,.08);
+    border-left:5px solid gold;
+    padding:15px;
+    border-radius:15px;
+    margin-bottom:15px;
+    transition:.3s;
+}
+
+.partido:hover{
+    transform:translateX(8px);
+    background:rgba(255,255,255,.15);
+}
+
+.fecha{
+    color:#00ff99;
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+.marcador{
+    font-size:24px;
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+.detalle{
+    color:#ddd;
+    font-size:14px;
+    line-height:1.5;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:900px){
+
+    #contenedor{
+        flex-direction:column;
+    }
+
+    #mapa-container,
+    #info{
+        width:100%;
+    }
+
+    .intro-texto h1{
+        font-size:40px;
+    }
+
+    .intro-texto h2{
+        font-size:24px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- INTRO -->
+
+<div id="intro">
+
+    <div class="pelota">⚽</div>
+
+    <div class="intro-texto">
+        <h1>MÉXICO 1986</h1>
+    </div>
+
+    <div class="intro-texto">
+        <h2>El Mundial de Maradona</h2>
+    </div>
+
+    <div class="intro-texto">
+        <p>La Mano de Dios y el Gol del Siglo</p>
+    </div>
+
+    <button id="btnSkip">Entrar al Mundial →</button>
+
+</div>
+
+<!-- CONTENIDO -->
+
+<div id="contenedor">
+
+    <!-- MAPA -->
+
+    <div id="mapa-container">
+
+        <h1>Mundial México 1986</h1>
+        <p>Haz clic en un estado para ver los partidos</p>
+
+        <svg viewBox="0 0 1000 600">
+
+            <path id="CDMX" class="estado con-partido" d="M480,350 L500,340 L520,360 L510,380 L490,375 L475,360 Z"/>
+            
+            <path id="Jalisco" class="estado con-partido" d="M370,280 L430,270 L440,320 L410,340 L380,330 L365,300 Z"/>
+            
+            <path id="Nuevo León" class="estado con-partido" d="M500,180 L560,170 L570,220 L540,240 L510,230 L495,200 Z"/>
+            
+            <path id="Puebla" class="estado con-partido" d="M510,365 L550,360 L560,385 L545,400 L515,395 Z"/>
+            
+            <path id="Querétaro" class="estado con-partido" d="M455,305 L480,300 L490,325 L475,335 L460,330 Z"/>
+            
+            <path id="Guanajuato" class="estado con-partido" d="M430,310 L460,305 L470,330 L445,340 Z"/>
+
+            <path id="Sonora" class="estado" d="M180,80 L320,70 L330,160 L200,170 Z"/>
+
+            <path id="Veracruz" class="estado" d="M550,380 L620,370 L630,450 L560,460 Z"/>
+
+        </svg>
+
+    </div>
+
+    <!-- INFO -->
+
+    <div id="info">
+
+        <h2>Selecciona un estado</h2>
+
+        <div id="contenido">
+            Aquí aparecerán los partidos históricos del Mundial México 1986.
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+/* INTRO */
+
+const intro = document.getElementById("intro");
+const btnSkip = document.getElementById("btnSkip");
+
+function cerrarIntro(){
+    intro.classList.add("oculto");
+}
+
+btnSkip.addEventListener("click", cerrarIntro);
+
+setTimeout(cerrarIntro, 7000);
+
+/* DATOS */
+
+const datos = {
+
+"CDMX": `
+<div class="nombre-estadio">
+Estadio Azteca - CDMX
+</div>
+
+<img class="foto-estadio"
+src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Estadio_Azteca_2015.jpg/800px-Estadio_Azteca_2015.jpg">
+
+<div class="partido">
+<div class="fecha">29 Junio 1986 - FINAL</div>
+<div class="marcador">Argentina 3 - 2 Alemania</div>
+<div class="detalle">
+Maradona campeón del mundo.
+</div>
+</div>
+
+<div class="partido">
+<div class="fecha">22 Junio 1986</div>
+<div class="marcador">Argentina 2 - 1 Inglaterra</div>
+<div class="detalle">
+La Mano de Dios y el Gol del Siglo.
+</div>
+</div>
+`,
+
+"Jalisco": `
+<div class="nombre-estadio">
+Estadio Jalisco
+</div>
+
+<img class="foto-estadio"
+src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Estadio_Jalisco_2.jpg/800px-Estadio_Jalisco_2.jpg">
+
+<div class="partido">
+<div class="fecha">1 Junio 1986</div>
+<div class="marcador">Brasil 1 - 0 España</div>
+<div class="detalle">
+Gol de Sócrates.
+</div>
+</div>
+`,
+
+"Nuevo León": `
+<div class="nombre-estadio">
+Estadio Universitario
+</div>
+
+<img class="foto-estadio"
+src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Estadio_Universitario_UANL.jpg/800px-Estadio_Universitario_UANL.jpg">
+
+<div class="partido">
+<div class="fecha">11 Junio 1986</div>
+<div class="marcador">Marruecos 3 - 1 Portugal</div>
+<div class="detalle">
+Primer africano en octavos.
+</div>
+</div>
+`,
+
+"Puebla": `
+<div class="nombre-estadio">
+Estadio Cuauhtémoc
+</div>
+
+<img class="foto-estadio"
+src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Estadio_Cuauht%C3%A9moc_Puebla.jpg/800px-Estadio_Cuauht%C3%A9moc_Puebla.jpg">
+
+<div class="partido">
+<div class="fecha">5 Junio 1986</div>
+<div class="marcador">Argentina 2 - 0 Corea</div>
+<div class="detalle">
+Debut mundialista de Maradona en México.
+</div>
+</div>
+`,
+
+"Querétaro": `
+<div class="nombre-estadio">
+La Corregidora
+</div>
+
+<img class="foto-estadio"
+src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Estadio_Corregidora.jpg/800px-Estadio_Corregidora.jpg">
+
+<div class="partido">
+<div class="fecha">4 Junio 1986</div>
+<div class="marcador">Uruguay 1 - 1 Alemania</div>
+<div class="detalle">
+Grupo E.
+</div>
+</div>
+`,
+
+"Guanajuato": `
+<div class="nombre-estadio">
+Estadio León
+</div>
+
+<img class="foto-estadio"
+src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Estadio_Le%C3%B3n.jpg/800px-Estadio_Le%C3%B3n.jpg">
+
+<div class="partido">
+<div class="fecha">2 Junio 1986</div>
+<div class="marcador">Francia 1 - 0 Canadá</div>
+<div class="detalle">
+Gol de Papin.
+</div>
+</div>
+`,
+
+"Sonora": `
+<h2>Sonora</h2>
+<p>No hubo partidos en este estado.</p>
+`,
+
+"Veracruz": `
+<h2>Veracruz</h2>
+<p>No hubo partidos en este estado.</p>
+`
+
+};
+
+/* EVENTOS */
+
+document.querySelectorAll(".estado").forEach(estado=>{
+
+    estado.addEventListener("click",function(){
+
+        const nombre = this.id;
+
+        const contenido = document.getElementById("contenido");
+
+        contenido.style.opacity = 0;
+
+        setTimeout(()=>{
+
+            document.querySelector("#info h2").innerText = nombre;
+
+            contenido.innerHTML = datos[nombre];
+
+            contenido.style.opacity = 1;
+
+        },300);
+
+    });
+
+});
+
+</script>
+
+</body>
+</html>
